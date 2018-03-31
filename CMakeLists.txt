@@ -3,7 +3,7 @@ project(HW3 C)
 
 # setto un pò di flag vari
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_FLAGS "-O3 -lpthread")
+set(CMAKE_C_FLAGS "-O3 -pthread")
 
 # aggiungo la directory-root da dove pescare le librerie
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
