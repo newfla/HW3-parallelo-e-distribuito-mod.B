@@ -38,6 +38,8 @@ void mat_mat_threads(int ntrow, int ntcol, int n, int m, int p, int lda, int ldb
     // dimensioni delle sottomatrici
     int sub_n = n/ntrow;
     int sub_p = p/ntcol;
+    int rest_n = n%ntrow;
+    int rest_p = p%ntcol;
 
     int thread_number = 0;
     for(int i=0; i<ntrow ; i++){
@@ -52,6 +54,16 @@ void mat_mat_threads(int ntrow, int ntcol, int n, int m, int p, int lda, int ldb
             args[thread_number].A = &A[i*sub_n][0];
             args[thread_number].B = &B[0][i*sub_p];
             args[thread_number].C = &C[i*sub_n][j*sub_p];
+
+            if(rest_n>0){
+                rest_n--;
+                args[thread_number].n++;
+            }
+
+            if(rest_p>0){
+                rest_p--;
+                args[thread_number].p++;
+            }
 
             // creazione del thread
             pthread_create(threads+thread_number, NULL , mat_mat_thread, args+thread_number);
