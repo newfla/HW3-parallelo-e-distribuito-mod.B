@@ -37,12 +37,23 @@ void mat_mat_threads(int ntrow, int ntcol, int n, int m, int p, int lda, int ldb
 
     // dimensioni delle sottomatrici
     int sub_n = n/ntrow;
-    int sub_p = p/ntcol;
     int rest_n = n%ntrow;
-    int rest_p = p%ntcol;
+
+    if(rest_n!=0) sub_n++;
+    else rest_n = -1;
+
+    int offset_i = 0;
 
     int thread_number = 0;
     for(int i=0; i<ntrow ; i++){
+
+        int sub_p = p/ntcol;
+        int rest_p = p%ntcol;
+
+        if(rest_p!=0) sub_p++;
+        else rest_p = -1;
+        int offset_j = 0;
+
         for(int j=0; j<ntcol; j++){
             // parametri del thread
             args[thread_number].n=sub_n;
@@ -51,23 +62,32 @@ void mat_mat_threads(int ntrow, int ntcol, int n, int m, int p, int lda, int ldb
             args[thread_number].lda=lda;
             args[thread_number].ldb=ldb;
             args[thread_number].ldc=ldc;
-            args[thread_number].A = &A[i*sub_n][0];
-            args[thread_number].B = &B[0][i*sub_p];
-            args[thread_number].C = &C[i*sub_n][j*sub_p];
-
-            if(rest_n>0){
-                rest_n--;
-                args[thread_number].n++;
-            }
-
-            if(rest_p>0){
-                rest_p--;
-                args[thread_number].p++;
-            }
+            args[thread_number].A = &(A[offset_i][0]);
+            args[thread_number].B = &(B[0][offset_j]);
+            args[thread_number].C = &(C[offset_i][offset_j]);
 
             // creazione del thread
             pthread_create(threads+thread_number, NULL , mat_mat_thread, args+thread_number);
             thread_number++;
+
+            offset_j += sub_p;
+
+            if(rest_p>0)
+                rest_p--;
+
+            if(rest_p==0){
+                sub_p--;
+                rest_p--;
+            }
+        }
+
+        offset_i += sub_n;
+
+        if(rest_n>0)
+            rest_n--;
+        if(rest_n==0){
+            sub_n--;
+            rest_n--;
         }
     }
 
