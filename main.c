@@ -49,7 +49,7 @@ void execMat_Mat(int n, int ntrow, int ntcol, double*A, double*B, double*C){
     double btime, etime, span;
     char result[50];
     btime = get_cur_time(); //inizio blocco da monitorare
-    mat_mat_threads(ntrow,ntcol,n,n,n,n,n,n,(double (*)[])A,(double (*)[])B,(double (*)[])C);
+    mat_mat_threads(ntrow,ntcol,n,n,n,MAX_N,MAX_N,MAX_N,(double (*)[])A,(double (*)[])B,(double (*)[])C);
     etime = get_cur_time();  //fine blocco da monitorare
     span=etime-btime;
     span=(2*(pow(n,3)))/span;
