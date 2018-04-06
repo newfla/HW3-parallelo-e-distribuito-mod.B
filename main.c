@@ -6,7 +6,7 @@
 #include <memory.h>
 
 #define MAX_N 500
-#define MAX_THREADS 4
+#define MAX_THREADS 8
 #define fileName "../Test.csv"
 
 void execMat_Mat(int n, int ntrow, int ntcol, double*A, double*B, double*C);
