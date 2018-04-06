@@ -1,10 +1,11 @@
 #include <pthread.h>
+#include <stdio.h>
 
 //Migliore
 void mat_mat_ikj(int n, int m, int p, int lda, int ldb, int ldc, double A[][lda], double B[][ldb], double C[][ldc]){
     for(int i=0; i<n; i++){
-        for (int k = 0; k < p; k++) {
-            for (int j = 0; j < m; j++) {
+        for (int k = 0; k < m; k++) {
+            for (int j = 0; j < p; j++) {
                 C[i][j]+=A[i][k]*B[k][j];
             }
         }
@@ -13,7 +14,7 @@ void mat_mat_ikj(int n, int m, int p, int lda, int ldb, int ldc, double A[][lda]
 
 
 // struttura di parametri del thread
-typedef struct mat_mat_thread_arg{
+struct mat_mat_thread_arg{
     int n;
     int m;
     int p;
@@ -26,7 +27,7 @@ typedef struct mat_mat_thread_arg{
 };
 
 // thread per prodotto sottomatrici
-void mat_mat_thread(void *args){
+void* mat_mat_thread(void *args){
     struct mat_mat_thread_arg *arg = (struct mat_mat_thread_arg *)args;
     mat_mat_ikj(arg->n, arg->m, arg->p, arg->lda, arg->ldb, arg->ldc, (double (*)[])(arg->A), (double (*)[])(arg->B), (double (*)[])(arg->C));
 }
@@ -34,6 +35,8 @@ void mat_mat_thread(void *args){
 void mat_mat_threads(int ntrow, int ntcol, int n, int m, int p, int lda, int ldb, int ldc, double A[][lda], double B[][ldb], double C[][ldc]){
     pthread_t threads[ntrow*ntcol];
     struct mat_mat_thread_arg args[ntrow*ntcol];
+
+    printf("ntrow=%d,ntcol=%d\n", ntrow, ntcol);
 
     // dimensioni delle sottomatrici
     int sub_n = n/ntrow;

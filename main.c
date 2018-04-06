@@ -6,7 +6,7 @@
 #include <memory.h>
 
 #define MAX_N 500
-#define MAX_THREADS 2
+#define MAX_THREADS 4
 #define fileName "../Test.csv"
 
 void execMat_Mat(int n, int ntrow, int ntcol, double*A, double*B, double*C);
@@ -32,8 +32,7 @@ int main() {
     int *divisori=find_divisors(MAX_THREADS);
 
     //Per dimensioni crescenti dell'input
-    for (int j = 5; j <=MAX_N; j+=5) {
-
+    for (int j = 500; j <=MAX_N; j+=5) {
         //Per ogni coppia di NTROW e NTCOL (a,b)!=(b,a)
         for (int i = 1; i < divisori[0]; i+=2) {
             execMat_Mat(j,divisori[i],divisori[i+1],A,B,C);
