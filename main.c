@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include <Utility/utility.h>
+#include "utility.h"
 #include <stdlib.h>
 #include <math.h>
-#include <Mat_Mat/mat_mat.h>
+#include "mat_mat.h"
 #include <memory.h>
 
 #define MAX_N 500
@@ -12,12 +12,14 @@
 void execMat_Mat(int n, int ntrow, int ntcol, double*A, double*B, double*C);
 
 int main() {
-    char *firstLine="Ntrow_Ntcol;Dimension;Performance";
+    char *firstLine="Ntrow_Ntcol;Dimension;Performance\n";
     double *A, *B, *C;
 
     //Creazione file .CSV con intestazione
-    clean_file(fileName);
-    append_to_file(fileName,firstLine);
+    // clean_file(fileName);
+   // append_to_file(fileName,firstLine);
+
+printf(firstLine);
 
     //Inizializzazione variabili
     A=(double*)calloc(MAX_N*MAX_N, sizeof(double));
@@ -32,7 +34,7 @@ int main() {
     int *divisori=find_divisors(MAX_THREADS);
 
     //Per dimensioni crescenti dell'input
-    for (int j = 500; j <=MAX_N; j+=5) {
+    for (int j = 5; j <=MAX_N; j+=5) {
         //Per ogni coppia di NTROW e NTCOL (a,b)!=(b,a)
         for (int i = 1; i < divisori[0]; i+=2) {
             execMat_Mat(j,divisori[i],divisori[i+1],A,B,C);
@@ -59,7 +61,8 @@ void execMat_Mat(int n, int ntrow, int ntcol, double*A, double*B, double*C){
     span/=pow(10,9);
     if (!isfinite(span))
         span=0.01;
-    sprintf(result,"%d_%d;%d;%.2f",ntrow,ntcol,n,span);
-    append_to_file(fileName,result);
+    sprintf(result,"%d_%d;%d;%.2f\n",ntrow,ntcol,n,span);
+    printf(result);
+  //  append_to_file(fileName,result);
     memset(C, 0, sizeof(double)*(MAX_N*MAX_N));
 }
