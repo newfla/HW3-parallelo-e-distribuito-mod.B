@@ -1,5 +1,4 @@
 #include <pthread.h>
-#include <stdio.h>
 
 //Migliore
 void mat_mat_ikj(int n, int m, int p, int lda, int ldb, int ldc, double A[][lda], double B[][ldb], double C[][ldc]){
@@ -35,8 +34,6 @@ void* mat_mat_thread(void *args){
 void mat_mat_threads(int ntrow, int ntcol, int n, int m, int p, int lda, int ldb, int ldc, double A[][lda], double B[][ldb], double C[][ldc]){
     pthread_t threads[ntrow*ntcol];
     struct mat_mat_thread_arg args[ntrow*ntcol];
-
-    printf("ntrow=%d,ntcol=%d\n", ntrow, ntcol);
 
     // dimensioni delle sottomatrici
     int sub_n = n/ntrow;
