@@ -28,9 +28,13 @@ void fill_vector(double* vector, int n){
         vector[i]=rand_from(10,30);
 }
 
+//Passare null per fare il printf
 void append_to_file (char* fileName, char* string){
-
-    FILE* file=fopen(fileName,"a");
+    FILE* file;
+    if (fileName!=NULL)
+        file=fopen(fileName,"a");
+    else
+        file=stdout;
     char* newLine="\n";
 
     if (file==NULL)
@@ -40,12 +44,14 @@ void append_to_file (char* fileName, char* string){
 
     if (ftell(file)!=0)
         fprintf(file,newLine);
-
     fputs(string,file);
-    fclose(file);
+    if (fileName!=NULL)
+        fclose(file);
 }
 
 void clean_file(char* fileName){
+    if (fileName==NULL)
+        return;
     FILE* file=fopen(fileName,"w");
     fclose(file);
 }

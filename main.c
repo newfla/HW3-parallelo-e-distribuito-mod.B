@@ -7,15 +7,15 @@
 
 #define MAX_N 500
 #define MAX_THREADS 4
-#define fileName "../Test.csv"
 
-void execMat_Mat(int n, int ntrow, int ntcol, double*A, double*B, double*C);
+void execMat_Mat(char* fileName, int n, int ntrow, int ntcol, double*A, double*B, double*C);
 
 int main() {
-    char *firstLine="Ntrow_Ntcol;Dimension;Performance";
+    char *firstLine="Ntrow_Ntcol;Dimension;Performance",
+        *fileName;//="../Test.csv";
     double *A, *B, *C;
-
     //Creazione file .CSV con intestazione
+    //fileName==NULL indica che vado in stdout così non dobbiamo modificare nè il pbs nè il codice ;)
     clean_file(fileName);
     append_to_file(fileName,firstLine);
 
@@ -32,12 +32,12 @@ int main() {
     int *divisori=find_divisors(MAX_THREADS);
 
     //Per dimensioni crescenti dell'input
-    for (int j = 500; j <=MAX_N; j+=5) {
+    for (int j = 5; j <=MAX_N; j+=5) {
         //Per ogni coppia di NTROW e NTCOL (a,b)!=(b,a)
         for (int i = 1; i < divisori[0]; i+=2) {
-            execMat_Mat(j,divisori[i],divisori[i+1],A,B,C);
+            execMat_Mat(fileName,j,divisori[i],divisori[i+1],A,B,C);
             if (divisori[i]!=divisori[i+1])
-                execMat_Mat(j,divisori[i+1],divisori[i],A,B,C);
+                execMat_Mat(fileName,j,divisori[i+1],divisori[i],A,B,C);
         }
 
     }
@@ -48,7 +48,7 @@ int main() {
     return 0;
 }
 
-void execMat_Mat(int n, int ntrow, int ntcol, double*A, double*B, double*C){
+void execMat_Mat(char* fileName, int n, int ntrow, int ntcol, double*A, double*B, double*C){
     double btime, etime, span;
     char result[50];
     btime = get_cur_time(); //inizio blocco da monitorare

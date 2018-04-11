@@ -96,7 +96,6 @@ void mat_mat_threads(int ntrow, int ntcol, int n, int m, int p, int lda, int ldb
     for(int i=0; i<ntrow ; i++)
         for(int j=0; j<ntcol; j++)
             pthread_join(threads[thread_number++], NULL);
-
 }
 
 
