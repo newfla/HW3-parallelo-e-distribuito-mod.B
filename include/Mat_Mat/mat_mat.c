@@ -34,6 +34,7 @@ void* mat_mat_thread(void *args){
 void mat_mat_threads(int ntrow, int ntcol, int n, int m, int p, int lda, int ldb, int ldc, double A[][lda], double B[][ldb], double C[][ldc]){
     pthread_t threads[ntrow*ntcol];
     struct mat_mat_thread_arg args[ntrow*ntcol];
+    int me=0, maxChildThread=(ntcol*ntrow)-1;
 
     // dimensioni delle sottomatrici
     int sub_n = n/ntrow;
@@ -92,10 +93,8 @@ void mat_mat_threads(int ntrow, int ntcol, int n, int m, int p, int lda, int ldb
     }
 
     // attesa della terminazione dei threads
-    thread_number = 0;
-    for(int i=0; i<ntrow ; i++)
-        for(int j=0; j<ntcol; j++)
-            pthread_join(threads[thread_number++], NULL);
+    for(int i=0; i<(ntrow*ntcol) ; i++)
+        pthread_join(threads[i], NULL);
 }
 
 
