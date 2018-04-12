@@ -6,13 +6,13 @@
 #include <memory.h>
 
 #define MAX_N 500
-#define MAX_THREADS 4
+#define MAX_THREADS 2
 
 void execMat_Mat(char* fileName, int n, int ntrow, int ntcol, double*A, double*B, double*C);
 
 int main() {
     char *firstLine="Ntrow_Ntcol;Dimension;Performance",
-        *fileName;//="../Test.csv";
+        *fileName=NULL;//="../Test.csv";
     double *A, *B, *C;
     //Creazione file .CSV con intestazione
     //fileName==NULL indica che vado in stdout così non dobbiamo modificare nè il pbs nè il codice ;)
